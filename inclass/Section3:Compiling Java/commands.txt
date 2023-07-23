@@ -1,0 +1,6 @@
+
+   97  jar cf myjar.jar HelloWorld.class
+
+   99  java -classpath myjar.jar HelloWorld 
+  104  unzip  myjar.jar
+  152  java -classpath "./lib/*:./" HelloWorld
