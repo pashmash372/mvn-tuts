@@ -1,0 +1,111 @@
+Q.A snapshot version is a version that is currently under development and not production-ready.
+
+Ans.It is also a guideline that you shouldn't use this version in your application, since its API is not guaranteed to be stable.
+A snapshot version is a version that is currently under development and not production-ready.
+
+It is also a guideline that you shouldn't use this version in your application, since its API is not guaranteed to be stable.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Q.I was looking around for maven central repositories when I stumbled across two different urls:
+repo.maven.apache.org and another one (mentioned in Video#28) is repo1.maven.org
+Can you tell me what (if any) is the difference between the two?
+
+AnsBasically, these are mirrors and its just there default central repo url got changed from http://repo1.maven.org/maven2 to https://repo.maven.apache.org/maven2.
+
+Here maven.org is a domain owned by Sonatype, and apace.org is owned by the Apache Software Foundation.
+
+So, just in case sonatype CDN fails apache can take the traffic and serve the requests for artifacts.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+Q.What is the purpose of using a maven wrapper ?
+
+A.You don't need to install Maven locally. When you use Mave wrapper, you can ensure your whole team is using one Maven version.
+When you send your application to other stakeholders, testing team, opeartions, clients then won't require to install Maven and you would be ensuring all are using thew same Maven version thereby eliminating any version issues.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+Q.Hi, Could you please explain in other words what Maven Wagon is? I can't understand neither from this tutorial nor from docs.
+
+Ans I assume you know what a Maven repository is. It stores artifacts. As a programmer, you can download the artificat from a Maven repository as dependency for your project. You can also upload your artifact to a repository so that others can down load and use them.
+So how does you transfer these artifacts to and from Maven repositories?
+Do you want the transfer over HTTPS, SSL, Filke Transfer Protocol (FTP), Secure Copy Protocol?
+All the above transport protocols have their own rules and semantics.
+What you need is an interface that provides you a layer of abstraction so that you don't have to worry about the crux of the underling transport protocol.
+This layer of abstraction is provided by Maven Wagon as an API.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Q.
+Effective POM
+Could you please explain what exactly is Effective POM?
+What are the differences between simpliest POM & super POM?
+In the lecture, it's said that Effective POM, is the POM complete with inherited properties.
+Could you please give an example?
+
+Ans.
+You may find this article helpful https://www.baeldung.com/maven-super-simplest-effective-pom.
+There is another useful article about super POM, simplest POM and effective POM:
+
+https://medium.com/@harun_ergul/what-is-effective-pom-5c278fe53031
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+Q.
+The import scope is similar to the compile scope, but it does not actually include the dependency in the project's classpath. Instead, it imports the dependency management of another project, allowing you to reuse the dependency management of that project in your own project.
+Am I correct?
+
+Ans.Reference https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies
+
+When a dependency is in import scope, that means  the pom of that dependency will be incorporated into your current project. 
+
+A compile scope means the dependency should be on the classpath  in order to compile the project. If the dependency is not on the classpath, your IDE can download it for you.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Q.
+Dependency mediation
+If A->B->C->D2.0 and A->E->D1.0, then maven will add D1.0 as it is nearest in the tree. Won't that affect how C behaves? If so, what is the solution?
+
+ans.
+Dependency conflicts do occur.
+Check this https://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html
+You may then need to manually exclude the conflicting version with the <exclude> tag.
+Another link to check is this.
+https://dzone.com/articles/solving-dependency-conflicts-in-maven
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Q.
+Plugin Binding
+What is plugin Binding? What plugin Binding actually means?
+
+Ans.
+Plugin binding means binding a Maven lifestyle phase to a goal of a plugin.
+For example, Maven comes with a jar plugin with three goals: help, jar, and test-jar. The package phase of the default Maven life cycle is bound to the jar goal.
+So when you execute the package phase as mvn package , under the hood the jar goal of the jar plugin gets executed.
+
+ans.
+*Alert: This may be a bit confusing :)
+To start with remember these relationships:
+Lifecycle -has-> Phases
+Plugins -has-> Goals
+Phase -IS_Bound_To-> Goal
+This means when you execute a phase, under the hood some goal of some plugin gets executed and things get done.
+Phases by themself don't do anything. So if a phase is not bounded to a goal of plugin, it does nothing.
+By default Maven comes with several phases bounded to goals of plugins.
+So let's come to whatever you mentioned - clean.
+Maven has three lifecycles: clean, default, and site.
+Clean lifecycle has three phases: pre-clean, clean, post-clean
+Now by default Maven also comes with a clean plugin that has two goals: clean and help.
+The clean phase -IS_Bound_To-> clean goal.
+It becomes confusing here because all have the same name "clean"
+But technically, I can say
+"The clean phase of the clean lifecycle is bound to the clean goal of the clean plugin"
+So when I type "mvn clean", the following things happen.
+Maven checks the first phase pre-clean. As this phase is not bound to any plugin goals, it does nothing.
+Next Maven checks the clean phase. Maven then executes the bounded clean goal of the clean plugin.
+That's done.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+

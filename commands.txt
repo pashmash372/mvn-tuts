@@ -1,6 +1,10 @@
-
    97  jar cf myjar.jar HelloWorld.class
-
    99  java -classpath myjar.jar HelloWorld 
   104  unzip  myjar.jar
   152  java -classpath "./lib/*:./" HelloWorld
+  378  mvn clean 
+  381  unzip  hello-world-0.0.1-SNAPSHOT.jar 
+  383  mvn clean
+  407  mvn clean package  
+  429  mvn dependency:tree
+
